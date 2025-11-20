@@ -1,0 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Stack+Sans+Text:wght@200..700&display=swap');
+
+
+body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Stack Sans Text", sans-serif;
+}
+header{
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 15vw;
+    box-shadow: 0.5px 1px 10px #cecece;
+}
+
+.btnhome{
+    display: flex;
+    align-items: center;
+}
+
+.btnhome > a > img{
+    display: flex;
+    width: 200px;
+    padding: 15px;
+}
+
+.navbarol{
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbarol > li{
+    padding: 0 10px;
+}
+
+.navbarol > li > a{
+    color: black;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 400;
+}
+
+.navbarol > li > a:hover{
+    color: #0068ff;    
+}
+
+
+
+
+
+.ask{
+    display: flex;
+    height: 25vh;
+    justify-content: center;
+    align-items: center;
+
+    background-image: url("src/img/bg.png");
+    background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: center;
+    background-size: cover;
+}
+
+.ask > form{
+    display: flex;
+}
+
+.ask > form > input{
+    width: 30vw;
+    height: 3rem;
+    font-size: 1.2rem;
+    background-image: url("src/img/lupa.svg");
+    background-size: 1.6rem;
+    background-position: right 12px center;
+    background-repeat: no-repeat;
+    border: 0.5px solid #1d1d1d;
+    border-radius: 0.8rem;
+    padding-left: 1rem;
+}
+
+
+
+
+.container{
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    width: 60vw;
+}
+
+content{
+    display: flex;
+    flex-direction: row;
+    max-height: 365px;
+}
+
+content > .topo{
+    display: flex;
+    flex-direction: column;
+}
+
+content > .topo{
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    padding-right: 20px;
+}
+
+content > .topo > img{
+    border-radius: 1rem;
+    box-shadow: 0.3px 0px 5px #1d1d1d;
+}
+
+content > span{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+
+
+
+
+.gridcontent{
+    grid-template-columns: 3;
+    grid-template-rows: 3;
+    width: 100px;
+    height: 100px;
+    gap: 20px;
+    background-color: red;
+}
