@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  nome      String
+  cpf       String
+  senha     String
+  tipo      String
+  setor     String
+  dtCriacao DateTime @default(now())
+
+  criadoPorId Int?
+  criadoPor   Usuario? @relation("Criador", fields: [criadoPorId], references: [id])
+
+  usuariosCriados Usuario[] @relation("Criador")
+
+  publicacoes Publicacao[]
+}
+model Indicador {
+  id     Int    @id @default(autoincrement())
+  nome   String
+  classe String
+  setor  String
+
+  valores IndicadorValor[]
+}
+
+model IndicadorValor {
+  id           Int       @id @default(autoincrement())
+  valor        Float
+  data         DateTime
+  indicadorId  Int
+  indicador    Indicador @relation(fields: [indicadorId], references: [id])
+}
+
+model Ramal {
+  id       Int    @id @default(autoincrement())
+  numero   String
+  setor    String
+  subsetor String
+}
+
+model Publicacao {
+  id          Int      @id @default(autoincrement())
+  tipo        String
+  titulo      String
+  descricao   String
+  texto       String
+  pdfUrl      String?
+  dtCriacao   DateTime @default(now())
+
+  usuarioId Int
+  usuario   Usuario @relation(fields: [usuarioId], references: [id])
+}
