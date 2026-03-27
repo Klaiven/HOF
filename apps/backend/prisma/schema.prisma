@@ -25,22 +25,22 @@ model Usuario {
   publicacoes Publicacao[]
 }
 model Indicador {
-  id     Int    @id @default(autoincrement())
-  nome   String
-  classe String
-  setor  String
+  id      Int    @id @default(autoincrement())
+  nome    String @unique
+  classe  String
+  setor   String
 
   valores IndicadorValor[]
 }
 
 model IndicadorValor {
-  id           Int       @id @default(autoincrement())
-  valor        Float
-  data         DateTime
-  indicadorId  Int
-  indicador    Indicador @relation(fields: [indicadorId], references: [id])
+  id          Int       @id @default(autoincrement())
+  dados       Json   
+  data        DateTime  @default(now()) 
+  
+  indicadorId Int
+  indicador   Indicador @relation(fields: [indicadorId], references: [id])
 }
-
 model Ramal {
   id       Int    @id @default(autoincrement())
   numero   String

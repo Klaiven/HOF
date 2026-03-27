@@ -11,16 +11,17 @@ module.exports = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
     req.user = decoded;
 
-    // ✅ AGORA SIM pode validar
-    if (req.user.tipo !== 'master') {
-      return res.status(403).json({ error: 'Acesso negado' });
+    // Se a rota for administrativa (Site 2), permitimos master ou editor
+    const tiposAutorizados = ['master', 'editor', 'ti']; 
+    
+    if (!tiposAutorizados.includes(req.user.tipo)) {
+      return res.status(403).json({ error: 'Seu nível de acesso não permite esta ação.' });
     }
 
     next();
   } catch (error) {
-    return res.status(401).json({ error: 'Token inválido' });
+    return res.status(401).json({ error: 'Token inválido ou expirado' });
   }
 };
