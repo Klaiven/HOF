@@ -19,5 +19,14 @@ exports.login = async (username, senha) => {
     { expiresIn: '8h' }
   );
 
-  return { token };
+  const usuario = {
+    id: user.id,
+    username: user.username,
+    nome: user.nome
+  };
+
+  return {
+    token,
+    usuario
+  };
 };

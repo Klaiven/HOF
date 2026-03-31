@@ -17,6 +17,8 @@ model Usuario {
   setor     String
   dtCriacao DateTime @default(now())
 
+  ativo       Boolean  @default(true)
+
   criadoPorId Int?
   criadoPor   Usuario? @relation("Criador", fields: [criadoPorId], references: [id])
 
@@ -50,7 +52,7 @@ model Ramal {
 
 model Publicacao {
   id          Int      @id @default(autoincrement())
-  tipo        String
+  tipo        String //(Manual, Atualizações, Tutoriais, Publicações )
   titulo      String
   descricao   String
   texto       String

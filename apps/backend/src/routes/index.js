@@ -13,4 +13,8 @@ router.use('/ramais', ramaisRoutes);
 const indicadoresRoutes = require('../modules/indicadores/indicadores.routes');
 router.use('/indicadores', indicadoresRoutes);
 
+
+const publicacoesRoutes = require('../modules/publicacoes/publicacoes.routes');
+router.use('/publicacoes', publicacoesRoutes);
+
 module.exports = router;

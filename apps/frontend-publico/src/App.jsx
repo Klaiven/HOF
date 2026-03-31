@@ -34,23 +34,44 @@ function App() {
   return (
     <div className="flex flex-col min-h-screen bg-bg-light text-text-dark font-sans">
       
-      <header style={{ backgroundImage: `url(${bgHeader})` }}className="flex flex-col items-center px-[6vw] md:px-[10vw] h-[18vh] md:h-30vh] bg-center bg-cover bg-no-repeat shadow-md" > 
+      <header
+  style={{ backgroundImage: `url(${bgHeader})` }}
+  className="relative flex flex-col justify-between items-center px-4 md:px-[10vw] h-[22vh] md:h-[20vh] bg-center bg-cover bg-no-repeat shadow-md"
+>
 
-        <div className="flex justify-between items-center w-full mt-4">
-          <a href="/" className="transition-transform hover:scale-105">
-            <img src={logoHOF} alt="Hospital Otávio de Freitas" className="w-[100px] md:w-[180px]" />
-          </a>
-          <a href="https://www.pe.gov.br/" target="_blank" rel="noreferrer" className="transition-transform hover:scale-105">
-            <img src={logoGovPE} alt="Governo de Pernambuco" className="w-[150px] md:w-[220px]" />
-          </a>
-        </div>
 
-        <div className="mt-2 md:mt-4 text-center">
-          <h1 className="text-2xl md:text-4x1 font-bold text-white drop-shadow-md">
-            Hospital Otávio de Freitas
-          </h1>
-        </div>
-      </header>
+  <div className="absolute inset-0 bg-black/30"></div>
+
+  <div className="relative w-full flex justify-between items-center mt-3">
+    <a href="/" className="transition-transform hover:scale-105">
+      <img
+        src={logoHOF}
+        alt="Hospital Otávio de Freitas"
+        className="w-[90px] md:w-[160px]"
+      />
+    </a>
+
+    <a
+      href="https://www.pe.gov.br/"
+      target="_blank"
+      rel="noreferrer"
+      className="transition-transform hover:scale-105"
+    >
+      <img
+        src={logoGovPE}
+        alt="Governo de Pernambuco"
+        className="w-[120px] md:w-[200px]"
+      />
+    </a>
+  </div>
+  
+  <div className="relative flex flex-1 items-center justify-center text-center">
+    <h1 className="text-xl md:text-3xl font-bold text-white drop-shadow-lg px-2">
+      Hospital Otávio de Freitas
+    </h1>
+  </div>
+
+</header> 
 
       <main className="flex-grow w-full max-w-[1100px] mx-auto px-5 mt-10 md:mt-24 mb-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">

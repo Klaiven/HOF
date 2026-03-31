@@ -36,12 +36,12 @@ export const AuthProvider = ({ children }) => {
     setUser(data.usuario);
   };
 
-  const logout = () => {
-    localStorage.clear();
-    delete axios.defaults.headers.Authorization;
-    setUser(null);
-    window.location.href = "/login";
-  };
+const logout = () => {
+  console.log("DESLOGANDO...");
+  localStorage.clear();
+  delete axios.defaults.headers.Authorization;
+  setUser(null);
+};
 
   return (
     <AuthContext.Provider value={{ authenticated: !!user, user, login, logout, loading }}>

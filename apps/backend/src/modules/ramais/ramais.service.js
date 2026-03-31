@@ -11,3 +11,17 @@ exports.create = async (data) => {
     data
   });
 };
+
+exports.delete = async (id) => {
+  return await prisma.ramal.delete({
+    where: { id: Number(id) }
+  });
+};
+
+// 🔥 NOVO UPDATE
+exports.update = async (id, data) => {
+  return await prisma.ramal.update({
+    where: { id: Number(id) },
+    data
+  });
+};
