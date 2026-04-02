@@ -13,9 +13,9 @@ function Layout({ children, title }) {
   const menu = [
     { nome: 'Início', rota: '/' },
     { nome: 'Ramais', rota: '/ramais' },
-    { nome: 'Manuais', rota: '/manuais' },
-    { nome: 'Tutoriais', rota: '/tutoriais' },
-    { nome: 'Atualizações', rota: '/atualizacoes' },
+    { nome: 'Manuais', rota: '/publicacoes/manuais' },
+    { nome: 'Tutoriais', rota: '/publicacoes/tutoriais' },
+    { nome: 'Atualizações', rota: '/publicacoes/atualizacoes' },
   ];
 
   const getNomeCurto = () => {

@@ -14,9 +14,9 @@ function Home() {
 
   const menu = [
     { nome: 'Ramais', icon: Phone, rota: '/ramais' },
-    { nome: 'Manuais', icon: FileText, rota: '/manuais' },
-    { nome: 'Tutoriais', icon: BookOpen, rota: '/tutoriais' },
-    { nome: 'Atualizações', icon: Megaphone, rota: '/atualizacoes' },
+    { nome: 'Manuais', icon: FileText, rota: 'publicacoes/manuais' },
+    { nome: 'Tutoriais', icon: BookOpen, rota: 'publicacoes/tutoriais' },
+    { nome: 'Atualizações', icon: Megaphone, rota: 'publicacoes/atualizacoes' },
     { nome: 'Login', icon: Lock, rota: '/login' }
   ];
 

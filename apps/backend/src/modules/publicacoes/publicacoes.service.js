@@ -7,6 +7,17 @@ exports.getByTipo = async (tipo) => {
   });
 };
 
+exports.getById = async (id) => {
+  return await prisma.publicacao.findUnique({
+    where: {
+      id: Number(id),
+    },
+    include: {
+      usuario: true, // 🔥 ESSENCIAL pro seu frontend
+    },
+  });
+};
+
 exports.create = async (data) => {
   return prisma.publicacao.create({
     data

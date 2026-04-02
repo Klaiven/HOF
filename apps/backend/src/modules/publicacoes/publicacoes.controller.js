@@ -10,6 +10,22 @@ exports.getPublicacoes = async (req, res) => {
   }
 };
 
+exports.getById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const data = await service.getById(id);
+
+    if (!data) {
+      return res.status(404).json({ error: 'Publicação não encontrada' });
+    }
+
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao buscar publicação' });
+  }
+};
+
 exports.create = async (req, res) => {
   try {
     const data = await service.create(req.body);

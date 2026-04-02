@@ -7,6 +7,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use('/uploads', express.static('uploads'));
+
 require('./modules/indicadores/indicadores.cron');
 
 app.get('/', (req, res) => {

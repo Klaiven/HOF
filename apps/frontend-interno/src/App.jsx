@@ -1,17 +1,22 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
+import { ProtectedRoute } from './components/ProtectedRoute';
+
 import Home from './pages/Home';
 import Login from './pages/Login';
+
+
 import Admin from './pages/Admin';
-import Ramais from './pages/Ramais';
-import Manuais from './pages/Manuais';
-import Tutoriais from './pages/Tutoriais';
-import Atualizacoes from './pages/Atualizacoes';
-import { ProtectedRoute } from './components/ProtectedRoute';
+
 import AdminManualForm from './pages/admin/AdminManualForm';
 import AdminTutorialForm from './pages/admin/AdminTutorialForm';
 import AdminAtualizacaoForm from './pages/admin/AdminAtualizacaoForm';
+
 import AdminUsuarioForm from './pages/admin/AdminUsuarioForm';
+
+
+import Publicacoes from './pages/Publicacoes';
+import PublicacaoDetalhe from './pages/PublicacaoDetalhe';
 
 
 function App() {
@@ -47,13 +52,17 @@ function App() {
       <Route path="/admin/atualizacoes/novo" element={<ProtectedRoute> <AdminAtualizacaoForm /> </ProtectedRoute>} />
       <Route path="/admin/atualizacoes/:id" element={<ProtectedRoute> <AdminAtualizacaoForm /> </ProtectedRoute>} />
 
+
+
       <Route path="/admin/usuarios/novo" element={<ProtectedRoute> <AdminUsuarioForm /> </ProtectedRoute>} />
       <Route path="/admin/usuarios/:id" element={<ProtectedRoute> <AdminUsuarioForm /> </ProtectedRoute>} />
 
-      <Route path="/ramais" element={<Ramais />} />
-      <Route path="/manuais" element={<Manuais />}/>
-      <Route path="/tutoriais" element={<Tutoriais />} />
-      <Route path="/atualizacoes" element={<Atualizacoes />}/>
+
+
+      
+      <Route path="/publicacoes/:tipo" element={<Publicacoes />} />
+      <Route path="/publicacoes/:tipo/:id" element={<PublicacaoDetalhe />} />
+
 
       </Routes>
     </BrowserRouter>
