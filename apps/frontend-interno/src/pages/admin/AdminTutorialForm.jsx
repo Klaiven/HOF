@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+//import axios from 'axios';
+import api from '../../services/api';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Save, Upload, Link as LinkIcon, FileText, Type, AlignLeft, Tag } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
@@ -10,6 +11,7 @@ function AdminTutorialForm() {
   const { user } = useAuth();
 
   const isEdit = !!id;
+  const [file, setFile] = useState(null);
 
   const [form, setForm] = useState({
     tipo: 'Tutoriais', // 🔥 Padrão alterado
@@ -22,7 +24,7 @@ function AdminTutorialForm() {
   // 🔥 carregar dados para edição
   useEffect(() => {
     if (isEdit) {
-      axios.get(`http://localhost:3000/api/publicacoes`)
+      api.get(`/publicacoes`)
         .then(res => {
           const item = res.data.find(p => p.id === Number(id));
           if (item) setForm(item);
@@ -91,10 +93,12 @@ function AdminTutorialForm() {
 
   // 🔥 upload local (preview)
   const handleFile = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const arquivo = e.target.files[0];
+    if (!arquivo) return;
 
-    const url = URL.createObjectURL(file);
+    setFile(arquivo);
+
+    const url = URL.createObjectURL(arquivo);
 
     setForm({
       ...form,
@@ -102,22 +106,40 @@ function AdminTutorialForm() {
     });
   };
 
+  const uploadArquivo = async () => {
+  if (!file) return form.pdfUrl;
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const res = await api.post(
+    '/publicacoes/upload',
+    formData
+  );
+
+  return res.data.url;
+};
+
   // 🔥 salvar
   const salvar = async () => {
     try {
+      const url = await uploadArquivo();
+
+      const payload = {
+        ...form,
+        pdfUrl: url,
+        usuarioId: user.id
+      };
+
       if (isEdit) {
-        await axios.put(
-          `http://localhost:3000/api/publicacoes/${id}`,
-          form
+        await api.put(
+          `/publicacoes/${id}`,
+          payload
         );
       } else {
-        await axios.post(
-          `http://localhost:3000/api/publicacoes`,
-          {
-            ...form,
-            tipo: 'Tutoriais', // 🔒 fixo na criação de tutoriais
-            usuarioId: user.id
-          }
+        await api.post(
+          `/publicacoes`,
+          payload
         );
       }
 
@@ -125,6 +147,7 @@ function AdminTutorialForm() {
 
     } catch (err) {
       console.error('Erro ao salvar', err);
+      alert('Erro ao salvar');
     }
   };
 

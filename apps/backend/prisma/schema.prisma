@@ -44,12 +44,7 @@ model IndicadorValor {
   indicadorId Int
   indicador   Indicador @relation(fields: [indicadorId], references: [id])
 }
-model Ramal {
-  id       Int    @id @default(autoincrement())
-  numero   String
-  setor    String
-  subsetor String
-}
+
 
 model Setores {
   id       Int    @id @default(autoincrement())

@@ -1,19 +1,22 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('./publicacoes.controller');
-
-
 const upload = require('../../middlewares/uploadPublicacoes');
+const { authMiddleware, authorize } = require('../../middlewares/authMiddleware');
 
-router.get('/', controller.getPublicacoes);
-router.post('/', controller.create);
-router.put('/:id', controller.update);
-router.delete('/:id', controller.remove);
+// Leitura: Todos os níveis autenticados
+router.get('/', authMiddleware, authorize(['comum', 'administrador', 'master']), controller.getPublicacoes);
+router.get('/:id', authMiddleware, authorize(['comum', 'administrador', 'master']), controller.getById);
 
-router.get('/:id', controller.getById);
+// Criação e Edição: Administrador e Master
+router.post('/', authMiddleware, authorize(['administrador', 'master']), controller.create);
+router.put('/:id', authMiddleware, authorize(['administrador', 'master']), controller.update);
 
+// Exclusão: Apenas Master
+router.delete('/:id', authMiddleware, authorize(['master']), controller.remove);
 
-router.post('/upload', upload.single('file'), (req, res) => {
+// Upload: Administrador e Master (pois é uma ação de escrita/criação)
+router.post('/upload', authMiddleware, authorize(['administrador', 'master']), upload.single('file'), (req, res) => {
   try {
     const filePath = req.file.path.replace(/\\/g, '/');
 
@@ -27,4 +30,3 @@ router.post('/upload', upload.single('file'), (req, res) => {
 });
 
 module.exports = router;
-

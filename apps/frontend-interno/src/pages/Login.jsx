@@ -43,7 +43,7 @@ function Login() {
             placeholder="Usuário"
             className="w-full p-4 rounded-xl bg-slate-50 focus:ring-2 focus:ring-primary outline-none"
             value={form.username}
-            onChange={(e) => setForm({ ...form, username: e.target.value })}
+            onChange={(e) => setForm({ ...form, username: e.target.value.toLowerCase().replace(/\s/g, '').replace(/[^a-z0-9._]/g, '') })}
             required
           />
 

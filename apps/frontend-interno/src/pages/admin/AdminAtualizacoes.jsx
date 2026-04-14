@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+//import axios from 'axios';
+import api from '../../services/api';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,8 +15,8 @@ function AdminAtualizacoes() {
   // 🔥 Carrega os dados filtrando pelo tipo selecionado no select
   const carregar = async () => {
     try {
-      const { data } = await axios.get(
-        `/api/publicacoes?tipo=${tipoFiltro}`
+      const { data } = await api.get(
+        `/publicacoes?tipo=${tipoFiltro}`
       );
       setAtualizacoes(data);
     } catch (err) {
@@ -42,7 +43,7 @@ function AdminAtualizacoes() {
     if (!window.confirm('Deseja realmente excluir?')) return;
 
     try {
-      await axios.delete(`/api/publicacoes/${id}`);
+      await api.delete(`/publicacoes/${id}`);
       carregar();
     } catch (err) {
       console.error('Erro ao excluir');

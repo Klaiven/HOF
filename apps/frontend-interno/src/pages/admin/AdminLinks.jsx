@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+//import axios from 'axios';
+import api from '../../services/api';
 import { Pencil, Trash2, Folder, FileText, Globe, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -8,7 +9,7 @@ function AdminLinks() {
   const navigate = useNavigate();
 
   const carregar = async () => {
-    const res = await axios.get('/api/links');
+    const res = await api.get('/links');
     setDados(res.data);
   };
 
@@ -18,7 +19,7 @@ function AdminLinks() {
 
   const excluir = async (id) => {
     if (!window.confirm('Deseja excluir?')) return;
-    await axios.delete(`/api/links/${id}`);
+    await api.delete(`/links/${id}`);
     carregar();
   };
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
+import api from '../../services/api';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,9 +15,8 @@ function AdminManuais() {
   // 🔥 Carrega os dados filtrando pelo tipo selecionado no select
   const carregar = async () => {
     try {
-      const { data } = await axios.get(
-        `/api/publicacoes?tipo=${tipoFiltro}`
-      );
+      // const { data } = await axios.get(`/api/publicacoes?tipo=${tipoFiltro}`);
+      const { data } = await api.get('/publicacoes?tipo=Manual');
       setManuais(data);
     } catch (err) {
       console.error('Erro ao carregar manuais');

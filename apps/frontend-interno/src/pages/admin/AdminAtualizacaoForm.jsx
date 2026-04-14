@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+//import axios from 'axios';
+import api from '../../services/api';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Save, Upload, Link as LinkIcon, FileText, Type, AlignLeft, Tag } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
@@ -26,7 +27,7 @@ function AdminAtualizacaoForm() {
   // 🔥 carregar dados para edição
   useEffect(() => {
     if (isEdit) {
-      axios.get(`/api/publicacoes`)
+      api.get(`/publicacoes`)
         .then(res => {
           const item = res.data.find(p => p.id === Number(id));
           if (item) setForm(item);
@@ -114,8 +115,8 @@ function AdminAtualizacaoForm() {
     const formData = new FormData();
     formData.append('file', file);
 
-    const res = await axios.post(
-      '/api/publicacoes/upload',
+    const res = await api.post(
+      '/publicacoes/upload',
       formData
     );
 
@@ -134,13 +135,13 @@ function AdminAtualizacaoForm() {
       };
 
       if (isEdit) {
-        await axios.put(
-          `/api/publicacoes/${id}`,
+        await api.put(
+          `/publicacoes/${id}`,
           payload
         );
       } else {
-        await axios.post(
-          `/api/publicacoes`,
+        await api.post(
+          `/publicacoes`,
           payload
         );
       }

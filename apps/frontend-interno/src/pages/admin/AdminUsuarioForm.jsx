@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+//import axios from 'axios';
+import api from '../../services/api';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Save, User, Lock, Briefcase, Shield, Fingerprint } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
@@ -8,6 +9,8 @@ function AdminUsuarioForm() {
   const navigate = useNavigate();
   const { id } = useParams();
   const { user } = useAuth();
+
+  const token = localStorage.getItem('token');
 
   const isEdit = !!id;
 
@@ -22,7 +25,7 @@ function AdminUsuarioForm() {
 
   useEffect(() => {
     if (isEdit) {
-      axios.get(`http://localhost:3000/api/usuarios`)
+      api.get(`/usuarios`)
         .then(res => {
           const item = res.data.find(u => u.id === Number(id));
           if (item) {
@@ -78,9 +81,9 @@ function AdminUsuarioForm() {
       if (isEdit) {
         // Na edição, se a senha estiver vazia, removemos do payload para não apagar a atual
         if (!payload.senha) delete payload.senha;
-        await axios.put(`http://localhost:3000/api/usuarios/${id}`, payload);
+        await api.put(`/usuarios/${id}`, payload);
       } else {
-        await axios.post(`http://localhost:3000/api/usuarios`, {
+        await api.post(`/usuarios`, {
           ...payload,
           criadoPorId: user.id
         });
@@ -116,14 +119,14 @@ function AdminUsuarioForm() {
 
           {/* NOME */}
           <div className="space-y-2 md:col-span-2">
-            <label className="text-sm font-semibold text-slate-600 flex items-center gap-2">
+            <label className="text-sm font-semibold text-slate-600 flex items-center gap-2 capitalize">
               <User size={16} /> Nome Completo <span className="text-red-500">*</span>
             </label>
             <input
               placeholder="Ex: João da Silva..."
               value={form.nome}
               onChange={(e) => setForm({ ...form, nome: e.target.value })}
-              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none"
+              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none capitalize"
             />
           </div>
 
@@ -136,7 +139,15 @@ function AdminUsuarioForm() {
               placeholder="Ex: joao.silva"
               value={form.username}
               // 🔥 Expressão Regular (.replace) impede que o usuário digite espaços
-              onChange={(e) => setForm({ ...form, username: e.target.value.replace(/\s/g, '') })}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  username: e.target.value
+                    .toLowerCase()
+                    .replace(/\s/g, '')
+                    .replace(/[^a-z0-9._]/g, '')
+                })
+              }
               className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none"
             />
           </div>

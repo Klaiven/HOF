@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+//import axios from 'axios';
+import api from '../../services/api';
 import { Plus, Pencil, UserX, Shield, Briefcase } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,7 +14,7 @@ function AdminUsuarios() {
   const carregar = async () => {
     try {
       // Ajuste o endpoint caso necessário
-      const { data } = await axios.get(`http://localhost:3000/api/usuarios`);
+      const { data } = await api.get(`/usuarios`);
       setUsuarios(data);
     } catch (err) {
       console.error('Erro ao carregar usuários');
@@ -35,7 +36,7 @@ function AdminUsuarios() {
     if (!window.confirm(`Deseja realmente desativar o acesso de ${nome}? Ele não será excluído do banco.`)) return;
 
     try {
-      await axios.delete(`http://localhost:3000/api/usuarios/${id}`);
+      await api.delete(`/usuarios/${id}`);
       carregar();
     } catch (err) {
       console.error('Erro ao desativar');
@@ -108,8 +109,8 @@ function AdminUsuarios() {
             {filtrados.map((item) => (
               <tr key={item.id} className="border-t hover:bg-slate-50">
                 <td className="p-4">
-                  <p className="font-bold text-slate-800">{highlight(item.nome)}</p>
-                  <p className="text-xs text-slate-500">@{highlight(item.username)}</p>
+                  <p className="font-bold text-slate-800 capitalize">{highlight(item.nome)}</p>
+                  <p className="text-xs text-slate-500 lowercase">@{highlight(item.username)}</p>
                 </td>
                 <td className="p-4 text-slate-600 flex items-center gap-2 mt-2">
                   <Briefcase size={14} className="text-slate-400" />

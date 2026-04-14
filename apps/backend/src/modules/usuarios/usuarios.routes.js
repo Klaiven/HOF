@@ -1,11 +1,25 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('./usuarios.controller');
-const authMiddleware = require('../../middlewares/authMiddleware');
 
-router.get('/', authMiddleware, controller.getAll);
-router.post('/', authMiddleware, controller.create);
-router.put('/:id', authMiddleware, controller.update);
-router.delete('/:id', authMiddleware, controller.desativar); // Delete agora chama o desativar
+// 1. IMPORTAÇÃO CORRIGIDA (usando desestruturação)
+const { authMiddleware, authorize } = require('../../middlewares/authMiddleware');
+
+/**
+ * PADRÃO DE ACESSO PARA USUÁRIOS:
+ * Como a gestão de usuários é uma área sensível:
+ * - GET: Administrador e Master
+ * - POST / PUT / DELETE: Apenas Master
+ */
+
+// Leitura
+router.get('/', authMiddleware, authorize(['administrador', 'master']), controller.getAll);
+// Caso tenha uma rota de buscar por ID:
+// router.get('/:id', authMiddleware, authorize(['administrador', 'master']), controller.getById);
+
+// Escrita (Apenas Master)
+router.post('/', authMiddleware, authorize(['administrador','master']), controller.create);
+router.put('/:id', authMiddleware, authorize(['administrador','master']), controller.update);
+router.delete('/:id', authMiddleware, authorize(['master']), controller.desativar);
 
 module.exports = router;

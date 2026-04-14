@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+//import axios from 'axios';
+import api from '../../services/api';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Save, Upload } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
@@ -44,7 +45,7 @@ function AdminLinkForm() {
 
   // 🔥 CARREGAR DADOS
   useEffect(() => {
-    axios.get('/api/links')
+    api.get('/links')
       .then(res => {
         const data = res.data;
 
@@ -71,8 +72,8 @@ function AdminLinkForm() {
     // 2º - ANEXE O ARQUIVO POR ÚLTIMO
     formData.append('file', file);
 
-    const res = await axios.post(
-      '/api/links/upload',
+    const res = await api.post(
+      '/links/upload',
       formData
     );
 
@@ -124,9 +125,9 @@ function AdminLinkForm() {
       };
 
       if (isEdit) {
-        await axios.put(`/api/links/${id}`, payload);
+        await api.put(`/links/${id}`, payload);
       } else {
-        await axios.post('/api/links', payload);
+        await api.post('/links', payload);
       }
 
       navigate('/admin');

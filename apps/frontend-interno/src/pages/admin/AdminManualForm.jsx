@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+//import axios from 'axios';
+import api from '../../services/api';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Save, Upload, Link as LinkIcon, FileText, Type, AlignLeft, Tag } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
@@ -10,6 +11,7 @@ function AdminManualForm() {
   const { user } = useAuth();
 
   const isEdit = !!id;
+  const [file, setFile] = useState(null);
 
   const [form, setForm] = useState({
     tipo: 'Manual',
@@ -22,7 +24,7 @@ function AdminManualForm() {
   // 🔥 carregar dados para edição
   useEffect(() => {
     if (isEdit) {
-      axios.get(`http://localhost:3000/api/publicacoes`)
+      api.get(`/publicacoes`)
         .then(res => {
           const item = res.data.find(p => p.id === Number(id));
           if (item) setForm(item);
@@ -91,10 +93,12 @@ function AdminManualForm() {
 
   // 🔥 upload local (preview)
   const handleFile = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const arquivo = e.target.files[0];
+    if (!arquivo) return;
 
-    const url = URL.createObjectURL(file);
+    setFile(arquivo);
+
+    const url = URL.createObjectURL(arquivo);
 
     setForm({
       ...form,
@@ -102,30 +106,49 @@ function AdminManualForm() {
     });
   };
 
+    const uploadArquivo = async () => {
+    if (!file) return form.pdfUrl;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const res = await api.post(
+      '/publicacoes/upload',
+      formData
+    );
+
+    return res.data.url;
+  };
+
   // 🔥 salvar
   const salvar = async () => {
-    try {
-      if (isEdit) {
-        await axios.put(
-          `http://localhost:3000/api/publicacoes/${id}`,
-          form
-        );
-      } else {
-        await axios.post(
-          `http://localhost:3000/api/publicacoes`,
-          {
-            ...form,
-            tipo: 'Manual', // 🔒 fixo na criação
-            usuarioId: user.id
-          }
-        );
-      }
+  try {
+    const url = await uploadArquivo();
 
-      navigate('/admin');
+    const payload = {
+      ...form,
+      pdfUrl: url,
+      usuarioId: user.id
+    };
 
-    } catch (err) {
-      console.error('Erro ao salvar', err);
+    if (isEdit) {
+      await api.put(
+        `/publicacoes/${id}`,
+        payload
+      );
+    } else {
+      await api.post(
+        `/publicacoes`,
+        payload
+      );
     }
+
+    navigate('/admin');
+
+  } catch (err) {
+    console.error('Erro ao salvar', err);
+    alert('Erro ao salvar');
+  }
   };
 
   return (
