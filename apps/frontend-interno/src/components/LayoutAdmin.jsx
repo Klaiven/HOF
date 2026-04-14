@@ -1,6 +1,6 @@
 import React from 'react';
 import { 
-  Phone, FileText, BookOpen, RefreshCw, Users, Home, LogOut, LayoutDashboard, User
+  Phone, FileText, BookOpen, RefreshCw, Users, Home, LogOut, LayoutDashboard, User, Form
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
@@ -12,6 +12,7 @@ const menu = [
   { id: 'tutoriais', label: 'Tutoriais', icon: BookOpen },
   { id: 'atualizacoes', label: 'Atualizações', icon: RefreshCw },
   { id: 'usuarios', label: 'Usuários', icon: Users }, 
+  { id: 'links', label: 'Forms Personalizados', icon: Form }, 
 ];
 
 function LayoutAdmin({ children, abaAtiva, setAbaAtiva }) {

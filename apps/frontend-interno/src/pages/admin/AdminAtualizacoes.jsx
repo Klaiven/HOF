@@ -7,7 +7,7 @@ function AdminAtualizacoes() {
   const [atualizacoes, setAtualizacoes] = useState([]);
   const [busca, setBusca] = useState('');
   const [buscaInput, setBuscaInput] = useState('');
-  const [tipoFiltro, setTipoFiltro] = useState('Atualizacoes'); // 🔥 Padrão alterado para Atualizações
+  const [tipoFiltro, setTipoFiltro] = useState('Atualizações'); // 🔥 Padrão alterado para Atualizações
 
   const navigate = useNavigate();
 
@@ -15,7 +15,7 @@ function AdminAtualizacoes() {
   const carregar = async () => {
     try {
       const { data } = await axios.get(
-        `http://localhost:3000/api/publicacoes?tipo=${tipoFiltro}`
+        `/api/publicacoes?tipo=${tipoFiltro}`
       );
       setAtualizacoes(data);
     } catch (err) {
@@ -42,7 +42,7 @@ function AdminAtualizacoes() {
     if (!window.confirm('Deseja realmente excluir?')) return;
 
     try {
-      await axios.delete(`http://localhost:3000/api/publicacoes/${id}`);
+      await axios.delete(`/api/publicacoes/${id}`);
       carregar();
     } catch (err) {
       console.error('Erro ao excluir');

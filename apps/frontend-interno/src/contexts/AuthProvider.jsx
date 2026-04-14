@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (username, senha) => {
     // Chamada ao backend
-    const { data } = await axios.post('http://localhost:3000/api/auth/login', { username, senha });
+    const { data } = await axios.post('/api/auth/login', { username, senha });
     
     // IMPORTANTE: Salvar TUDO antes de atualizar o estado
     localStorage.setItem('token', data.token);

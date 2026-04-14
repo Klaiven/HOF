@@ -85,7 +85,7 @@ function Layout({ children, title }) {
       <div className="flex flex-col flex-1 w-full h-full relative">
 
         {/* HEADER */}
-        <header className="bg-white shadow-sm px-4 md:px-6 py-3 flex items-center justify-between shrink-0 z-10">
+        <header className="bg-white shadow-sm px-4 md:px-6 py-3 flex items-center justify-between shrink-0 z-10 capitalize">
 
           {/* ESQUERDA DO HEADER (Títulos e Botões) */}
           <div className="flex items-center gap-3">

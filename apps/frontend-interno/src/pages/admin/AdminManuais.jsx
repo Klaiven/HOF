@@ -15,7 +15,7 @@ function AdminManuais() {
   const carregar = async () => {
     try {
       const { data } = await axios.get(
-        `http://localhost:3000/api/publicacoes?tipo=${tipoFiltro}`
+        `/api/publicacoes?tipo=${tipoFiltro}`
       );
       setManuais(data);
     } catch (err) {
@@ -42,10 +42,10 @@ function AdminManuais() {
     if (!window.confirm('Deseja realmente excluir?')) return;
 
     try {
-      await axios.delete(`http://localhost:3000/api/publicacoes/${id}`);
+      await axios.delete(`/api/publicacoes/${id}`);
       carregar();
     } catch (err) {
-      console.error('Erro ao excluir');
+      console.error('Erro ao excluir:', err.response?.data || err.message);
     }
   };
 

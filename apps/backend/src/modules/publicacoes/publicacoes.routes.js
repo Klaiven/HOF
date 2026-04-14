@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const controller = require('./publicacoes.controller');
 
-const upload = require('../../middlewares/upload');
+
+const upload = require('../../middlewares/uploadPublicacoes');
 
 router.get('/', controller.getPublicacoes);
 router.post('/', controller.create);
@@ -12,12 +13,14 @@ router.delete('/:id', controller.remove);
 router.get('/:id', controller.getById);
 
 
-
 router.post('/upload', upload.single('file'), (req, res) => {
   try {
-    const fileUrl = `http://localhost:3000/uploads/${req.file.filename}`;
+    const filePath = req.file.path.replace(/\\/g, '/');
 
-    res.json({ url: fileUrl });
+    res.json({
+      url: `api/${filePath}`
+    });
+
   } catch (err) {
     res.status(500).json({ error: 'Erro no upload' });
   }

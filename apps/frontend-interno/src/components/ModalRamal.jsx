@@ -27,12 +27,12 @@ function ModalRamal({ open, onClose, onSuccess, ramalEdit }) {
     try {
       if (ramalEdit) {
         await axios.put(
-          `http://localhost:3000/api/ramais/${ramalEdit.id}`,
+          `/api/ramais/${ramalEdit.id}`,
           form
         );
       } else {
         await axios.post(
-          `http://localhost:3000/api/ramais`,
+          `/api/ramais`,
           form
         );
       }
@@ -74,7 +74,7 @@ function ModalRamal({ open, onClose, onSuccess, ramalEdit }) {
             placeholder="Setor"
             value={form.setor}
             onChange={(e) =>
-              setForm({ ...form, setor: e.target.value.toUpperCase() })
+              setForm({ ...form, setor: e.target.value.toLowerCase() })
             }
             className="w-full p-3 bg-slate-50 rounded-xl outline-none"
             required
@@ -84,7 +84,7 @@ function ModalRamal({ open, onClose, onSuccess, ramalEdit }) {
             placeholder="Subsetor"
             value={form.subsetor}
             onChange={(e) =>
-              setForm({ ...form, subsetor: e.target.value.toUpperCase() })
+              setForm({ ...form, subsetor: e.target.value.toLowerCase() })
             }
             className="w-full p-3 bg-slate-50 rounded-xl outline-none"
           />
@@ -93,7 +93,7 @@ function ModalRamal({ open, onClose, onSuccess, ramalEdit }) {
             placeholder="Número do Ramal"
             value={form.numero}
             onChange={(e) =>
-              setForm({ ...form, numero: e.target.value })
+              setForm({ ...form, numero: e.target.value.replace(/[^0-9._]/g, '') })
             }
             className="w-full p-3 bg-slate-50 rounded-xl outline-none font-mono"
             required

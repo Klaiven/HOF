@@ -4,6 +4,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Save, Upload, Link as LinkIcon, FileText, Type, AlignLeft, Tag } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 
+
+
 function AdminAtualizacaoForm() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -11,8 +13,10 @@ function AdminAtualizacaoForm() {
 
   const isEdit = !!id;
 
+  const [file, setFile] = useState(null);
+
   const [form, setForm] = useState({
-    tipo: 'Atualizacoes', // 🔥 Padrão alterado
+    tipo: 'Atualizações', // 🔥 Padrão alterado
     titulo: '',
     descricao: '',
     texto: '',
@@ -22,7 +26,7 @@ function AdminAtualizacaoForm() {
   // 🔥 carregar dados para edição
   useEffect(() => {
     if (isEdit) {
-      axios.get(`http://localhost:3000/api/publicacoes`)
+      axios.get(`/api/publicacoes`)
         .then(res => {
           const item = res.data.find(p => p.id === Number(id));
           if (item) setForm(item);
@@ -91,10 +95,12 @@ function AdminAtualizacaoForm() {
 
   // 🔥 upload local (preview)
   const handleFile = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const arquivo = e.target.files[0];
+    if (!arquivo) return;
 
-    const url = URL.createObjectURL(file);
+    setFile(arquivo);
+
+    const url = URL.createObjectURL(arquivo);
 
     setForm({
       ...form,
@@ -102,22 +108,40 @@ function AdminAtualizacaoForm() {
     });
   };
 
+    const uploadArquivo = async () => {
+    if (!file) return form.pdfUrl;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const res = await axios.post(
+      '/api/publicacoes/upload',
+      formData
+    );
+
+    return res.data.url;
+  };
+
   // 🔥 salvar
   const salvar = async () => {
     try {
+      const url = await uploadArquivo();
+
+      const payload = {
+        ...form,
+        pdfUrl: url,
+        usuarioId: user.id
+      };
+
       if (isEdit) {
         await axios.put(
-          `http://localhost:3000/api/publicacoes/${id}`,
-          form
+          `/api/publicacoes/${id}`,
+          payload
         );
       } else {
         await axios.post(
-          `http://localhost:3000/api/publicacoes`,
-          {
-            ...form,
-            tipo: 'Atualizações', // 🔒 fixo na criação
-            usuarioId: user.id
-          }
+          `/api/publicacoes`,
+          payload
         );
       }
 
@@ -125,6 +149,7 @@ function AdminAtualizacaoForm() {
 
     } catch (err) {
       console.error('Erro ao salvar', err);
+      alert('Erro ao salvar');
     }
   };
 

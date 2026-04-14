@@ -4,10 +4,7 @@ const fs = require('fs');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-
-    const pastaDestino = req.body.pasta ? req.body.pasta.toLowerCase() : 'geral';
-    const dir = `C:/inetpub/wwwroot/hof/uploadslinks/${pastaDestino}`;
-
+    const dir = 'uploads/publicacoes';
 
     fs.mkdirSync(dir, { recursive: true });
 
@@ -21,7 +18,11 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  const allowed = ['application/pdf']; 
+  const allowed = [
+    'application/pdf',
+    'video/mp4'
+  ];
+
   if (allowed.includes(file.mimetype)) {
     cb(null, true);
   } else {
