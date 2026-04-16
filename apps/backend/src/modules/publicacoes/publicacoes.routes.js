@@ -4,9 +4,9 @@ const controller = require('./publicacoes.controller');
 const upload = require('../../middlewares/uploadPublicacoes');
 const { authMiddleware, authorize } = require('../../middlewares/authMiddleware');
 
-// Leitura: Todos os níveis autenticados
-router.get('/', authMiddleware, authorize(['comum', 'administrador', 'master']), controller.getPublicacoes);
-router.get('/:id', authMiddleware, authorize(['comum', 'administrador', 'master']), controller.getById);
+// Leitura: Público (sem autenticação)
+router.get('/', controller.getPublicacoes);
+router.get('/:id', controller.getById);
 
 // Criação e Edição: Administrador e Master
 router.post('/', authMiddleware, authorize(['administrador', 'master']), controller.create);

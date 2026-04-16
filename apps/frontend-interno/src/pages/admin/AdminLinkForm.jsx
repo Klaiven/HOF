@@ -15,6 +15,14 @@ const formatarParaUrl = (texto) => {
     .toLowerCase(); // Deixa tudo minúsculo
 };
 
+const sanitizarNome = (texto) => {
+  if (!texto) return '';
+  return texto
+    .trim() // Remove espaços no início e fim
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, ''); // Remove apenas acentos, mantém espaços internos se necessário
+};
+
 function AdminLinkForm() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -65,62 +73,60 @@ function AdminLinkForm() {
 
     const formData = new FormData();
     
-    // 1º - ANEXE OS TEXTOS PRIMEIRO (Usando a formatação limpa para o IIS/Servidor)
-    formData.append('pasta', formatarParaUrl(form.pasta));
-    formData.append('subpasta', formatarParaUrl(form.subpasta));
-    
-    // 2º - ANEXE O ARQUIVO POR ÚLTIMO
+    // Higienizamos os nomes para a criação física das pastas no servidor/IIS
+    // O uso de formatarParaUrl aqui garante que a pasta física seja "recursoshumanos" e não "Recursos Humanos!"
+    const pastaFisica = formatarParaUrl(form.pasta);
+    const subpastaFisica = formatarParaUrl(form.subpasta);
+
+    formData.append('pasta', pastaFisica);
+    formData.append('subpasta', subpastaFisica);
     formData.append('file', file);
 
-    const res = await api.post(
-      '/links/upload',
-      formData
-    );
-
+    const res = await api.post('/links/upload', formData);
     return res.data.url;
   };
 
   // 🔥 SALVAR
-  const salvar = async () => {
+const salvar = async () => {
+    // 1. Limpeza de segurança imediata
+    const pastaLimpa = sanitizarNome(form.pasta);
+    const subpastaLimpa = sanitizarNome(form.subpasta);
+    const nomeLimpo = form.nome.trim();
+
     if (!user?.id) {
       alert('Erro: usuário não identificado');
       return;
     }
 
-    if (!form.nome) {
-      alert('Nome é obrigatório');
+    if (!nomeLimpo) {
+      alert('O nome do formulário é obrigatório');
       return;
     }
 
     if (form.tipo === 'pdf') {
-      if (!form.pasta) {
-        alert('Pasta é obrigatória');
+      if (!pastaLimpa) {
+        alert('A pasta é obrigatória para arquivos PDF');
         return;
       }
-
       if (!file && !form.url) {
-        alert('Envie um arquivo PDF');
+        alert('Selecione um arquivo PDF');
         return;
       }
-    }
-
-    if (form.tipo === 'link' && !form.url) {
-      alert('Informe a URL');
-      return;
     }
 
     try {
-      const url = form.tipo === 'pdf'
+      // 2. O upload usará os nomes já sanitizados internamente
+      const urlFinal = form.tipo === 'pdf'
         ? await uploadArquivo()
-        : form.url;
+        : form.url.trim();
 
       const payload = {
-        nome: form.nome,
+        nome: nomeLimpo,
         tipo: form.tipo.toLowerCase(),
-        url,
-        // 🔥 Mantém o nome ORIGINAL no banco (sem formatação, com espaços e especiais)
-        pasta: form.tipo === 'pdf' ? form.pasta : '',
-        subpasta: form.tipo === 'pdf' ? (form.subpasta || '') : '',
+        url: urlFinal,
+        // 🔥 Salvamos no banco o nome sem espaços extras e sem acentos para bater com a lógica de busca
+        pasta: form.tipo === 'pdf' ? pastaLimpa : '',
+        subpasta: form.tipo === 'pdf' ? subpastaLimpa : '',
         usuarioId: user.id
       };
 
@@ -131,10 +137,9 @@ function AdminLinkForm() {
       }
 
       navigate('/admin');
-
     } catch (err) {
       console.error(err);
-      alert('Erro ao salvar');
+      alert('Erro ao salvar: Verifique a conexão com o servidor');
     }
   };
 

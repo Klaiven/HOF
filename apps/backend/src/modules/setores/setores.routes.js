@@ -5,8 +5,8 @@ const controller = require('./setores.controller');
 const { authMiddleware, authorize } = require('../../middlewares/authMiddleware');
 
 // GET: Comum, Administrador e Master
-router.get('/', authMiddleware, authorize(['comum', 'administrador', 'master']), controller.getAll);
-router.get('/:id', authMiddleware, authorize(['comum', 'administrador', 'master']), controller.getById);
+router.get('/', controller.getAll);
+router.get('/:id', controller.getById);
 
 // POST/PUT: Administrador e Master
 router.post('/', authMiddleware, authorize(['administrador', 'master']), controller.create);

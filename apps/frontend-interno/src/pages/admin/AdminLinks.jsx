@@ -9,8 +9,15 @@ function AdminLinks() {
   const navigate = useNavigate();
 
   const carregar = async () => {
-    const res = await api.get('/links');
-    setDados(res.data);
+    try {
+      console.log('Carregando links...');
+      const res = await api.get('/links');
+      console.log('Links carregados:', res.data);
+      setDados(res.data || []);
+    } catch (error) {
+      console.error('Erro ao carregar links:', error);
+      alert('Erro ao carregar documentos: ' + (error.response?.data?.message || error.message));
+    }
   };
 
   useEffect(() => {
@@ -19,8 +26,13 @@ function AdminLinks() {
 
   const excluir = async (id) => {
     if (!window.confirm('Deseja excluir?')) return;
-    await api.delete(`/links/${id}`);
-    carregar();
+    try {
+      await api.delete(`/links/${id}`);
+      carregar();
+    } catch (error) {
+      console.error('Erro ao excluir:', error);
+      alert('Erro ao excluir: ' + (error.response?.data?.message || error.message));
+    }
   };
 
   const linksExternos = dados.filter(i => i.tipo === 'link');

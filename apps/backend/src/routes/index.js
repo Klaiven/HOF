@@ -7,9 +7,6 @@ router.use('/usuarios', usuariosRoutes);
 const authRoutes = require('../modules/auth/auth.routes');
 router.use('/auth', authRoutes);
 
-// const ramaisRoutes = require('../modules/ramais/ramais.routes');
-// router.use('/ramais', ramaisRoutes);
-
 const setoresRoutes = require('../modules/setores/setores.routes');
 router.use('/setores', setoresRoutes);
 
