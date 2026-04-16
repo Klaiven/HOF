@@ -26,3 +26,9 @@ exports.delete = async (id) => {
     where: { id: Number(id) }
   });
 };
+
+exports.update = async (id) => {
+  return prisma.link.update({
+    where: { id: Number(id) }
+  });
+};

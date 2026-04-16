@@ -14,3 +14,8 @@ exports.remove = async (req, res) => {
   await service.delete(req.params.id);
   res.json({ ok: true });
 };
+
+exports.update = async (req, res) => {
+    await service.update(id, resto);
+    res.json({ ok: true });
+};

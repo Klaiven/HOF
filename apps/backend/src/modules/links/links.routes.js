@@ -9,6 +9,9 @@ router.get('/', controller.get);
 // Criação: Administrador e Master
 router.post('/', authMiddleware, authorize(['administrador', 'master']), controller.create);
 
+// Alteracao: Administrador e Master
+router.put('/:id', authMiddleware, authorize(['administrador', 'master']), controller.update);
+
 // Exclusão: Apenas Master
 router.delete('/:id', authMiddleware, authorize(['master']), controller.remove);
 
