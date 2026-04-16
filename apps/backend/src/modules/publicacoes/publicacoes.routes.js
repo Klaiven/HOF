@@ -18,10 +18,13 @@ router.delete('/:id', authMiddleware, authorize(['master']), controller.remove);
 // Upload: Administrador e Master (pois é uma ação de escrita/criação)
 router.post('/upload', authMiddleware, authorize(['administrador', 'master']), upload.single('file'), (req, res) => {
   try {
-    const filePath = req.file.path.replace(/\\/g, '/');
+    // 1. Pegamos apenas o nome final do arquivo que o Multer gerou
+    const filename = req.file.filename;
 
+    // 2. Retornamos o caminho público da web
+    // Como o IIS expõe a pasta publicacoes na raiz, o link fica /publicacoes/arquivo.pdf
     res.json({
-      url: `api/${filePath}`
+      url: `/publicacoes/${filename}`
     });
 
   } catch (err) {

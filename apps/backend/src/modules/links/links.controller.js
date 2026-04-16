@@ -16,6 +16,13 @@ exports.remove = async (req, res) => {
 };
 
 exports.update = async (req, res) => {
-    await service.update(id, resto);
-    res.json({ ok: true });
+    try {
+        const { id } = req.params;
+        const resto = req.body;
+        
+        await service.update(id, resto);
+        res.json({ ok: true });
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao atualizar o link' });
+    }
 };

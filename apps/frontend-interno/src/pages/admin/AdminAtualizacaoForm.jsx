@@ -41,7 +41,7 @@ function AdminAtualizacaoForm() {
 
     const url = form.pdfUrl;
 
-    // YouTube
+    // 1. YouTube
     if (url.includes('youtube.com') || url.includes('youtu.be')) {
       const videoId =
         url.includes('v=')
@@ -62,8 +62,12 @@ function AdminAtualizacaoForm() {
       );
     }
 
-    // PDF
-    if (url.endsWith('.pdf')) {
+    // 🔥 VERIFICAÇÃO INTELIGENTE DO BLOB LOCAL
+    const isLocalPdf = file && file.type === 'application/pdf' && url.startsWith('blob:');
+    const isLocalVideo = file && file.type.startsWith('video/') && url.startsWith('blob:');
+
+    // 2. PDF (Link terminando em .pdf OU Blob de arquivo tipo PDF)
+    if (url.toLowerCase().endsWith('.pdf') || isLocalPdf) {
       return (
         <div className="mt-4 border border-slate-200 rounded-xl overflow-hidden bg-slate-50">
            <div className="bg-slate-100 px-4 py-2 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">
@@ -77,8 +81,8 @@ function AdminAtualizacaoForm() {
       );
     }
 
-    // Vídeo local ou outro link de vídeo
-    if (url.match(/\.(mp4|webm|ogg)$/i) || url.startsWith('blob:')) {
+    // 3. Vídeo (Link com extensão de vídeo OU Blob de arquivo tipo Vídeo)
+    if (url.match(/\.(mp4|webm|ogg)$/i) || isLocalVideo) {
       return (
         <div className="mt-4 border border-slate-200 rounded-xl overflow-hidden bg-slate-50">
           <div className="bg-slate-100 px-4 py-2 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">

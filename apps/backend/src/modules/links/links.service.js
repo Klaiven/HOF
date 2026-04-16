@@ -27,8 +27,15 @@ exports.delete = async (id) => {
   });
 };
 
-exports.update = async (id) => {
+exports.update = async (id, data) => {
+  const { id: idDoBody, dtCriacao, ...dadosAtualizados } = data;
+
+  if (dadosAtualizados.usuarioId) {
+    dadosAtualizados.usuarioId = Number(dadosAtualizados.usuarioId);
+  }
+
   return prisma.link.update({
-    where: { id: Number(id) }
+    where: { id: Number(id) },
+    data: dadosAtualizados
   });
 };
