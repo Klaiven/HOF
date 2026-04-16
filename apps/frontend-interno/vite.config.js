@@ -7,5 +7,13 @@ export default defineConfig({
   build: {
     outDir: 'C:/inetpub/wwwroot/hof',
     emptyOutDir: false
+  },
+  server: {
+    host: true,
+    port: 5173,
+    // Aumentar limites para desenvolvimento
+    fs: {
+      strict: false
+    }
   }
 })

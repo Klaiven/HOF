@@ -7,16 +7,29 @@ function Login() {
   const { login } = useAuth();
   const [form, setForm] = useState({ username: '', senha: '' });
   const [erro, setErro] = useState('');
+  const [carregando, setCarregando] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validação dos campos
+    if (!form.username.trim() || !form.senha.trim()) {
+      setErro('Preencha todos os campos');
+      return;
+    }
+
+    setCarregando(true);
+    setErro('');
+    
     try {
       await login(form.username, form.senha);
       navigate('/admin');
-      console.log("Tentando login...");
     } catch (err) {
-      setErro('Usuário ou senha inválidos');
+      console.error('Erro de login:', err);
+      setErro(err.response?.data?.message || 'Usuário ou senha inválidos');
+    } finally {
+      setCarregando(false);
     }
   };
 
@@ -56,9 +69,12 @@ function Login() {
             required
           />
 
-          <button className="w-full bg-primary text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:opacity-90 transition">
+          <button 
+            disabled={carregando}
+            className="w-full bg-primary text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
             <LogIn size={18} />
-            Entrar
+            {carregando ? 'Entrando...' : 'Entrar'}
           </button>
 
         </form>

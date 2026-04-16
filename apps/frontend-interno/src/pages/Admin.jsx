@@ -3,10 +3,7 @@ import LayoutAdmin from '../components/LayoutAdmin';
 import { useNavigate } from 'react-router-dom';
 
 import AdminRamais from './admin/AdminRamais';
-import AdminManuais from './admin/AdminManuais';
 import AdminLinks from './admin/AdminLinks';
-import AdminTutoriais from './admin/AdminTutoriais';
-import AdminAtualizacoes from './admin/AdminAtualizacoes';
 import AdminUsuarios from './admin/AdminUsuarios';
 
 
@@ -19,15 +16,6 @@ function Admin() {
     switch (abaAtiva) {
       case 'ramais':
         return <AdminRamais />;
-
-      case 'manuais':
-        return <AdminManuais />;
-
-      case 'tutoriais':
-        return <AdminTutoriais />;
-
-      case 'atualizacoes':
-        return <AdminAtualizacoes />;
 
       case 'usuarios':
         return <AdminUsuarios />;

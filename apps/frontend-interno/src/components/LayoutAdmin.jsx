@@ -1,16 +1,13 @@
 import React from 'react';
 import { 
-  Phone, FileText, BookOpen, RefreshCw, Users, Home, LogOut, LayoutDashboard, User, Form
+  Briefcase, Users, Home, LogOut, LayoutDashboard, User, Form
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 
 const menu = [
   { id: 'inicio', label: 'Início', icon: Home },
-  { id: 'ramais', label: 'Ramais', icon: Phone },
-  { id: 'manuais', label: 'Manuais', icon: FileText },
-  { id: 'tutoriais', label: 'Tutoriais', icon: BookOpen },
-  { id: 'atualizacoes', label: 'Atualizações', icon: RefreshCw },
+  { id: 'ramais', label: 'Setores', icon: Briefcase },
   { id: 'usuarios', label: 'Usuários', icon: Users }, 
   { id: 'links', label: 'Forms Personalizados', icon: Form }, 
 ];

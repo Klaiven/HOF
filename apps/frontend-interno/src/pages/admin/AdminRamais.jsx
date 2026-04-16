@@ -20,7 +20,7 @@ function AdminRamais() {
       const { data } = await api.get('/setores');
       setRamais(data);
     } catch (err) {
-      console.error('Erro ao carregar ramais');
+      console.error('Erro ao carregar setores');
     }
   };
 
@@ -66,7 +66,7 @@ function AdminRamais() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-black text-slate-800">Setores / Ramais</h1>
+        <h1 className="text-2xl font-black text-slate-800">Setores</h1>
         <button
           onClick={() => { setRamalEdit(null); setOpenModal(true); }}
           className="bg-primary text-white px-4 py-2 rounded-xl flex items-center gap-2 hover:opacity-90"
