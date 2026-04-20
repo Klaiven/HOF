@@ -16,4 +16,7 @@ router.use('/setores', setoresRoutes);
 const publicacoesRoutes = require('../modules/publicacoes/publicacoes.routes');
 router.use('/publicacoes', publicacoesRoutes);
 
+const cesusRoutes = require('../modules/cesus/cesus.routes');
+router.use('/cesus', cesusRoutes);
+
 module.exports = router;

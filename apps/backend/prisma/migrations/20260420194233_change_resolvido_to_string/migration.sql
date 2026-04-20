@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "UsuarioCeSu" ALTER COLUMN "resolvido" DROP NOT NULL,
+ALTER COLUMN "resolvido" DROP DEFAULT,
+ALTER COLUMN "resolvido" SET DATA TYPE TEXT;

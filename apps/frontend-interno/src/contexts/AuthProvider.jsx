@@ -27,11 +27,14 @@ export const AuthProvider = ({ children }) => {
     if (recoveredUser && token) {
       try {
         const parsed = JSON.parse(recoveredUser);
-        
-        // Se não tiver tipo, decodificar do JWT
-        if (!parsed.tipo) {
-          const decoded = decodeJWT(token);
-          parsed.tipo = decoded?.tipo || 'usuario';
+        const decoded = decodeJWT(token);
+
+        // Garantir que tipo e setor estejam presentes (priorizando o token se disponível)
+        if (!parsed.tipo || !parsed.setor) {
+          if (decoded) {
+            parsed.tipo = parsed.tipo || decoded.tipo || decoded.role || 'usuario';
+            parsed.setor = parsed.setor || decoded.setor || decoded.department || decoded.unit;
+          }
         }
         
         setUser(parsed);
@@ -50,19 +53,20 @@ export const AuthProvider = ({ children }) => {
         throw new Error('Resposta inválida do servidor');
       }
       
-      // Decodificar JWT para extrair o tipo
+      // Decodificar JWT para extrair tipo e setor
       const decoded = decodeJWT(data.token);
       
-      // Adicionar tipo ao objeto usuario
-      const usuarioComTipo = {
+      // Montar objeto de usuário completo
+      const usuarioComInfo = {
         ...data.usuario,
-        tipo: decoded?.tipo || 'usuario'
+        tipo: decoded?.tipo || decoded?.role || data.usuario.tipo || 'usuario',
+        setor: decoded?.setor || decoded?.department || decoded?.unit || data.usuario.setor
       };
       
       localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(usuarioComTipo));
+      localStorage.setItem('user', JSON.stringify(usuarioComInfo));
       
-      setUser(usuarioComTipo);
+      setUser(usuarioComInfo);
     } catch (error) {
       throw error;
     }

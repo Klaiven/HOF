@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Phone, FileText, BookOpen, Megaphone, Globe, Folder, FileDown, Eye, X, Plus, Pencil, Trash2
+  Phone, FileText, BookOpen, Megaphone, Globe, Folder, FileDown, Eye, X, Plus, Pencil, Trash2, UserPlus
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
 import api from '../services/api';
 import { useAuth } from '../hooks/useAuth';
+import ModalUsuarioCeSu from '../components/ModalUsuarioCeSu';
 
 function Home() {
 
@@ -61,6 +62,7 @@ function Home() {
   const [editingLinkId, setEditingLinkId] = useState(null);
 
   const [openFormModal, setOpenFormModal] = useState(false);
+  const [openCeSuModal, setOpenCeSuModal] = useState(false);
   const [formUpload, setFormUpload] = useState({ nome: '', pasta: '', subpasta: '', file: null });
   const [savingForm, setSavingForm] = useState(false);
   const [formError, setFormError] = useState('');
@@ -286,6 +288,19 @@ function Home() {
             </div>
           );
         })}
+
+        <div
+          onClick={() => setOpenCeSuModal(true)}
+          className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center hover:shadow-xl hover:-translate-y-1 transition cursor-pointer"
+        >
+          <div className="bg-primary text-white w-14 h-14 flex items-center justify-center rounded-xl mb-3">
+            <UserPlus size={24} />
+          </div>
+
+          <span className="font-semibold text-secondary text-center">
+            Criar Usuário CeSu
+          </span>
+        </div>
       </div>
 
       {/* 🔥 LINKS EXTERNOS */}
@@ -589,6 +604,12 @@ function Home() {
         ))}
 
       </div>
+
+      <ModalUsuarioCeSu
+        open={openCeSuModal}
+        onClose={() => setOpenCeSuModal(false)}
+        onSuccess={() => alert('Solicitação enviada!')}
+      />
 
     </Layout>
   );
