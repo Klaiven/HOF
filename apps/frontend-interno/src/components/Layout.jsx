@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X, ArrowLeft, User, LayoutDashboard } from 'lucide-react';
+import { Menu, X, ArrowLeft, User } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import logoHOF from '../assets/img/HOF.png';
 import { useAuth } from '../hooks/useAuth';
@@ -16,6 +16,7 @@ function Layout({ children, title }) {
     { nome: 'Manuais', rota: '/publicacoes/manuais' },
     { nome: 'Tutoriais', rota: '/publicacoes/tutoriais' },
     { nome: 'Atualizações', rota: '/publicacoes/atualizacoes' },
+    ...(user?.tipo?.toLowerCase() === 'master' ? [{ nome: 'Usuários', rota: '/usuarios' }] : []),
   ];
 
   const getNomeCurto = () => {
@@ -106,23 +107,10 @@ function Layout({ children, title }) {
             </h1>
           </div>
 
-          {/* DIREITA DO HEADER (Usuário / Admin) */}
+          {/* DIREITA DO HEADER (Usuário / Login) */}
           <div className="flex items-center gap-4">
             {user ? (
               <>
-                {/* BOTÃO ADMIN */}
-                <button
-                  onClick={() => navigate('/admin')}
-                  className="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg transition-colors"
-                  title="Acessar Painel Administrativo"
-                >
-                  <LayoutDashboard size={18} className="text-primary" />
-                  <span className="text-sm font-semibold hidden sm:block">Admin</span>
-                </button>
-
-                {/* DIVISÓRIA (Some no mobile pequeno) */}
-                <div className="h-6 w-px bg-slate-200 hidden sm:block"></div>
-
                 {/* INFO USUÁRIO */}
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-primary border border-slate-200 shadow-sm">
@@ -132,11 +120,35 @@ function Layout({ children, title }) {
                     {getNomeCurto()}
                   </span>
                 </div>
+
+                {/* DIVISÓRIA (Some no mobile pequeno) */}
+                <div className="h-6 w-px bg-slate-200 hidden sm:block"></div>
+
+                {/* TIPO DE USUÁRIO */}
+                <span className="text-xs font-semibold text-slate-600 bg-slate-100 px-2 py-1 rounded-md capitalize">
+                  {user.tipo}
+                </span>
+
+                {/* BOTÃO SAIR */}
+                <button
+                  onClick={() => {
+                    localStorage.removeItem('token');
+                    window.location.reload();
+                  }}
+                  className="flex items-center gap-2 bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1.5 rounded-lg transition-colors"
+                  title="Sair do sistema"
+                >
+                  <span className="text-sm font-semibold">Sair</span>
+                </button>
               </>
             ) : (
-              <span className="text-sm uppercase font-black text-gray-500 hidden md:block">
-                Rede interna
-              </span>
+              <button
+                onClick={() => navigate('/login')}
+                className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg transition-colors"
+              >
+                <User size={18} />
+                <span className="text-sm font-semibold">Login</span>
+              </button>
             )}
           </div>
 

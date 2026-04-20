@@ -24,7 +24,7 @@ function Login() {
     
     try {
       await login(form.username, form.senha);
-      navigate('/admin');
+      navigate('/');
     } catch (err) {
       console.error('Erro de login:', err);
       setErro(err.response?.data?.message || 'Usuário ou senha inválidos');

@@ -7,22 +7,16 @@ import Login from './pages/Login';
 import Ramais from './pages/Ramais';
 
 import Formularios from './pages/Formularios';
-
-import Admin from './pages/Admin';
-
-import AdminPublicacaoForm from './pages/admin/AdminPublicacaoForm';
-import AdminLinkForm from './pages/admin/AdminLinkForm';
-import AdminLinks from './pages/admin/AdminLinks';
-import AdminUsuarioForm from './pages/admin/AdminUsuarioForm';
+import Usuarios from './pages/Usuarios';
+import UsuarioForm from './pages/UsuarioForm';
 
 import Publicacoes from './pages/Publicacoes';
 import PublicacaoDetalhe from './pages/PublicacaoDetalhe';
+import PublicacaoForm from './pages/PublicacaoForm';
 
 
 function App() {
   const { authenticated, loading } = useAuth();
-
-  // Se estiver lendo o localStorage, mostra uma tela vazia rápida
   if (loading) return null;
 
   return (
@@ -30,46 +24,22 @@ function App() {
       <Routes>
 
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={authenticated ? <Navigate to="/admin" replace /> : <Login />} />
+        <Route path="/login" element={authenticated ? <Navigate to="/" replace /> : <Login />} />
         
 
-        <Route 
-          path="/admin" 
-          element={
-            <ProtectedRoute>
-              <Admin />
-            </ProtectedRoute>
-          } 
-        />
+        <Route path="/ramais" element={<Ramais />} />
 
-      <Route path="/ramais" element={<Ramais />} />
+        <Route path="/usuarios" element={<ProtectedRoute><Usuarios /></ProtectedRoute>} />
+        <Route path="/usuarios/novo" element={<ProtectedRoute><UsuarioForm /></ProtectedRoute>} />
+        <Route path="/usuarios/:id" element={<ProtectedRoute><UsuarioForm /></ProtectedRoute>} />
 
-      <Route path="/formularios/:pasta" element={<Formularios />} />
-      <Route path="/formularios/:pasta/:sub" element={<Formularios />} />
+        <Route path="/formularios/:pasta" element={<Formularios />} />
+        <Route path="/formularios/:pasta/:sub" element={<Formularios />} />
 
-      
-      <Route path="/admin/manuais/novo" element={<ProtectedRoute> <AdminPublicacaoForm /> </ProtectedRoute>} />
-      <Route path="/admin/manuais/:id" element={<ProtectedRoute> <AdminPublicacaoForm /> </ProtectedRoute>} />
-
-      <Route path="/admin/tutoriais/novo" element={<ProtectedRoute> <AdminPublicacaoForm /> </ProtectedRoute>} />
-      <Route path="/admin/tutoriais/:id" element={<ProtectedRoute> <AdminPublicacaoForm /> </ProtectedRoute>} />
-
-      <Route path="/admin/atualizacoes/novo" element={<ProtectedRoute> <AdminPublicacaoForm /> </ProtectedRoute>} />
-      <Route path="/admin/atualizacoes/:id" element={<ProtectedRoute> <AdminPublicacaoForm /> </ProtectedRoute>} />
-
-      <Route path="/admin/links" element={<ProtectedRoute><AdminLinks /></ProtectedRoute>} />
-      <Route path="/admin/links/:id" element={<ProtectedRoute><AdminLinkForm /></ProtectedRoute>} />
-
-
-
-      <Route path="/admin/usuarios/novo" element={<ProtectedRoute> <AdminUsuarioForm /> </ProtectedRoute>} />
-      <Route path="/admin/usuarios/:id" element={<ProtectedRoute> <AdminUsuarioForm /> </ProtectedRoute>} />
-
-
-
-      
-      <Route path="/publicacoes/:tipo" element={<Publicacoes />} />
-      <Route path="/publicacoes/:tipo/:id" element={<PublicacaoDetalhe />} />
+        <Route path="/publicacoes/:tipo" element={<Publicacoes />} />
+        <Route path="/publicacoes/:tipo/:id" element={<PublicacaoDetalhe />} />
+        <Route path="/publicacoes/:tipo/novo" element={<ProtectedRoute><PublicacaoForm /></ProtectedRoute>} />
+        <Route path="/publicacoes/:tipo/:id/editar" element={<ProtectedRoute><PublicacaoForm /></ProtectedRoute>} />
 
 
       </Routes>

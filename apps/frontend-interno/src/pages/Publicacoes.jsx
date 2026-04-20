@@ -69,7 +69,7 @@ function Publicacoes() {
       {isAdminOrMaster && (
         <div className="mb-6 flex justify-end">
           <button
-            onClick={() => navigate(`/admin/${tipo}/novo`)}
+            onClick={() => navigate(`/publicacoes/${tipo}/novo`)}
             className="bg-primary text-white px-6 py-2 rounded-lg font-bold hover:bg-opacity-90 shadow-md transition flex items-center gap-2"
           >
             <Plus size={18} />
@@ -114,7 +114,7 @@ function Publicacoes() {
                   <div className="flex gap-2">
                     {isAdminOrMaster && (
                       <button
-                        onClick={() => navigate(`/admin/${tipo}/${item.id}`)}
+                        onClick={() => navigate(`/publicacoes/${tipo}/${item.id}/editar`)}
                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition"
                         title="Editar"
                       >
