@@ -12,6 +12,8 @@ model Usuario {
   username  String   @unique
   nome      String
   cpf       String
+  email     String?
+  dtNasc    DateTime?
   senha     String
   tipo      String
   setor     String
@@ -99,4 +101,5 @@ model UsuarioCeSu {
   usuarioAtendimento   Usuario? @relation("AtendimentoCeSu", fields: [usuarioAtendimentoId], references: [id])
 
   resolvido          String?
+  CdChamadoCesu      String?
 }

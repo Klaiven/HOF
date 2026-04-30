@@ -14,8 +14,7 @@ const { authMiddleware, authorize } = require('../../middlewares/authMiddleware'
 
 // Leitura
 router.get('/', authMiddleware, authorize(['administrador', 'master']), controller.getAll);
-// Caso tenha uma rota de buscar por ID:
-// router.get('/:id', authMiddleware, authorize(['administrador', 'master']), controller.getById);
+router.get('/:id', authMiddleware, authorize(['administrador', 'master']), controller.getById);
 
 // Escrita (Apenas Master)
 router.post('/', authMiddleware, authorize(['administrador','master']), controller.create);

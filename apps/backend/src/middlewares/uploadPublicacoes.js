@@ -20,13 +20,17 @@ const storage = multer.diskStorage({
 const fileFilter = (req, file, cb) => {
   const allowed = [
     'application/pdf',
-    'video/mp4'
+    'video/mp4',
+    'image/jpeg',
+    'image/png',
+    'image/gif',
+    'image/webp'
   ];
 
   if (allowed.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error('Tipo inválido'), false);
+    cb(new Error('Tipo de arquivo inválido. Apenas PDF, MP4 e imagens são permitidos.'), false);
   }
 };
 

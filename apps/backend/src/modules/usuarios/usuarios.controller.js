@@ -11,11 +11,26 @@ exports.getAll = async (req, res) => {
   }
 };
 
+exports.getById = async (req, res) => {
+  try {
+    const usuario = await service.getById(req.params.id);
+    if (!usuario) {
+      return res.status(404).json({ error: 'Usuário não encontrado' });
+    }
+    const { senha, ...seguro } = usuario;
+    res.json(seguro);
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao buscar usuário' });
+  }
+};
+
 exports.create = async (req, res) => {
   try {
     const usuario = await service.create(req.body);
-    res.json(usuario);
+    const { senha, ...seguro } = usuario;
+    res.json(seguro);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Erro ao criar usuário' });
   }
 };
@@ -23,8 +38,10 @@ exports.create = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     const usuario = await service.update(req.params.id, req.body);
-    res.json(usuario);
+    const { senha, ...seguro } = usuario;
+    res.json(seguro);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Erro ao atualizar usuário' });
   }
 };

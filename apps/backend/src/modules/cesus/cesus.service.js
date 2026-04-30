@@ -40,7 +40,8 @@ exports.create = async (data) => {
       descricao: data.descricao,
       usuarioAtendimentoId: data.usuarioAtendimentoId ? Number(data.usuarioAtendimentoId) : null,
       horarioAtendimento: data.horarioAtendimento ? new Date(data.horarioAtendimento) : null,
-      resolvido: data.resolvido !== undefined ? data.resolvido : null
+      resolvido: data.resolvido !== undefined ? data.resolvido : null,
+      CdChamadoCesu: data.CdChamadoCesu || null
     }
   });
 };
@@ -55,6 +56,7 @@ exports.update = async (id, data) => {
       setor: data.setor,
       descricao: data.descricao,
       resolvido: data.resolvido !== undefined ? data.resolvido : undefined,
+      CdChamadoCesu: data.CdChamadoCesu !== undefined ? data.CdChamadoCesu : undefined,
       usuarioAtendimentoId: data.usuarioAtendimentoId !== undefined ? (data.usuarioAtendimentoId ? Number(data.usuarioAtendimentoId) : null) : undefined,
       horarioAtendimento: data.horarioAtendimento !== undefined ? (data.horarioAtendimento ? new Date(data.horarioAtendimento) : null) : undefined,
     }

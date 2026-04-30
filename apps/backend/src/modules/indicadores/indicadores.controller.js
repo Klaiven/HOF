@@ -64,3 +64,26 @@ exports.getExamesImagem = async (req, res) => {
   }
 };
 
+exports.getPainelLaudos = async (req, res) => {
+  try {
+    const indicador = await prisma.indicador.findUnique({
+      where: { nome: 'Painel de Laudos' },
+      include: {
+        valores: {
+          orderBy: { data: 'desc' },
+          take: 1000 
+        }
+      }
+    });
+
+    if (!indicador || indicador.valores.length === 0) {
+      return res.status(404).json({ message: 'Dados de Painel de Laudos ainda não sincronizados.' });
+    }
+
+    res.json(indicador);
+  } catch (error) {
+    console.error('ERRO REAL:', error);
+    res.status(500).json({ error: error.message });
+  }
+};
+

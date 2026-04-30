@@ -17,6 +17,11 @@ exports.getById = async (id) => {
 
 exports.create = async (data) => {
   const senhaHash = await bcrypt.hash(data.senha, 10);
+  
+  if (data.dtNasc) {
+    data.dtNasc = new Date(data.dtNasc);
+  }
+
   return await prisma.usuario.create({
     data: {
       ...data,
@@ -31,6 +36,10 @@ exports.update = async (id, data) => {
     data.senha = await bcrypt.hash(data.senha, 10);
   } else {
     delete data.senha; 
+  }
+
+  if (data.dtNasc) {
+    data.dtNasc = new Date(data.dtNasc);
   }
 
   return await prisma.usuario.update({

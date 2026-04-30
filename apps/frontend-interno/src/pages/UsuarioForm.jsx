@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 import api from '../services/api';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Save, User, Shield, Eye, EyeOff, Users } from 'lucide-react';
+import { ArrowLeft, Save, User, Shield, Eye, EyeOff, Users, Calendar } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 
 function UsuarioForm() {
@@ -26,6 +26,8 @@ function UsuarioForm() {
     username: '',
     senha: '',
     cpf: '',
+    email: '',
+    dtNasc: '',
     tipo: 'Comum',
     setor: ''
   });
@@ -58,6 +60,8 @@ function UsuarioForm() {
               username: usuario.username || '',
               senha: '', // Não mostrar senha existente
               cpf: usuario.cpf || '',
+              email: usuario.email || '',
+              dtNasc: usuario.dtNasc ? formatarDataParaExibicao(usuario.dtNasc) : '',
               tipo: usuario.tipo || 'Comum',
               setor: usuario.setor || ''
             });
@@ -103,6 +107,39 @@ function UsuarioForm() {
     return null;
   };
 
+  const validarEmail = (value) => {
+    if (!value.trim()) return 'E-mail é obrigatório';
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!regex.test(value)) return 'E-mail inválido';
+    return null;
+  };
+
+  const validarDataNascimento = (value) => {
+    const dataLimpa = value.replace(/\D/g, '');
+    if (!dataLimpa) return 'Data de nascimento é obrigatória';
+    if (dataLimpa.length !== 8) return 'Data de nascimento deve estar no formato DD/MM/AAAA';
+
+    const dia = parseInt(dataLimpa.substring(0, 2));
+    const mes = parseInt(dataLimpa.substring(2, 4));
+    const ano = parseInt(dataLimpa.substring(4, 8));
+
+    if (dia < 1 || dia > 31) return 'Dia inválido';
+    if (mes < 1 || mes > 12) return 'Mês inválido';
+    
+    const anoAtual = new Date().getFullYear();
+    if (ano < 1900 || ano > anoAtual) return `Ano deve estar entre 1900 e ${anoAtual}`;
+
+    // Validar se a data é real (ex: 31/04)
+    const dataObj = new Date(ano, mes - 1, dia);
+    if (dataObj.getFullYear() !== ano || dataObj.getMonth() !== mes - 1 || dataObj.getDate() !== dia) {
+      return 'Data de nascimento inválida';
+    }
+
+    if (dataObj > new Date()) return 'Data de nascimento não pode ser no futuro';
+
+    return null;
+  };
+
   const capitalizarNome = (value) => {
     return value
       .trim()
@@ -118,6 +155,28 @@ function UsuarioForm() {
       .replace(/(\d{3})(\d)/, '$1.$2')
       .replace(/(\d{3})\.(\d{3})(\d)/, '$1.$2.$3')
       .replace(/(\d{3})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3-$4');
+  };
+
+  const formatarDataInput = (value) => {
+    const numeros = value.replace(/\D/g, '').slice(0, 8);
+    let formatado = numeros;
+    if (numeros.length > 2) formatado = numeros.substring(0, 2) + '/' + numeros.substring(2);
+    if (numeros.length > 4) formatado = formatado.substring(0, 5) + '/' + formatado.substring(5);
+    return formatado;
+  };
+
+  const formatarDataParaExibicao = (dataISO) => {
+    if (!dataISO) return '';
+    const date = new Date(dataISO);
+    const dia = String(date.getDate()).padStart(2, '0');
+    const mes = String(date.getMonth() + 1).padStart(2, '0');
+    const ano = date.getFullYear();
+    return `${dia}/${mes}/${ano}`;
+  };
+
+  const converterParaISO = (dataBR) => {
+    const [dia, mes, ano] = dataBR.split('/');
+    return `${ano}-${mes}-${dia}`;
   };
 
   const salvar = async () => {
@@ -138,6 +197,12 @@ function UsuarioForm() {
     const erroCPF = validarCPF(form.cpf);
     if (erroCPF) { alert(erroCPF); return; }
 
+    const erroEmail = validarEmail(form.email);
+    if (erroEmail) { alert(erroEmail); return; }
+
+    const erroData = validarDataNascimento(form.dtNasc);
+    if (erroData) { alert(erroData); return; }
+
     setSaving(true);
     try {
       const payload = {
@@ -145,7 +210,9 @@ function UsuarioForm() {
         username: form.username,
         tipo: form.tipo,
         setor: form.setor,
-        cpf: form.cpf.replace(/\D/g, '')
+        cpf: form.cpf.replace(/\D/g, ''),
+        email: form.email,
+        dtNasc: converterParaISO(form.dtNasc)
       };
 
       if (form.senha) {
@@ -168,7 +235,7 @@ function UsuarioForm() {
       if (err.response?.status === 400) {
         alert('Dados inválidos. Verifique os campos.');
       } else if (err.response?.status === 409) {
-        alert('Usuário já está em uso. Verifique o nome de usuário ou CPF.');
+        alert('Usuário já está em uso. Verifique o nome de usuário, CPF ou E-mail.');
       } else if (err.response?.status === 403) {
         alert('Você não tem permissão para esta ação.');
       } else {
@@ -256,6 +323,48 @@ function UsuarioForm() {
                   className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-mono"
                 />
               </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-slate-600 flex items-center gap-2">
+                  <Calendar size={16} /> Data de Nascimento
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="DD/MM/AAAA"
+                    value={form.dtNasc}
+                    onChange={(e) => setForm({ ...form, dtNasc: formatarDataInput(e.target.value) })}
+                    maxLength={10}
+                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-mono"
+                  />
+                  <input
+                    type="date"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 opacity-0 w-8 h-8 cursor-pointer"
+                    onChange={(e) => {
+                      if (e.target.value) {
+                        const [ano, mes, dia] = e.target.value.split('-');
+                        setForm({ ...form, dtNasc: `${dia}/${mes}/${ano}` });
+                      }
+                    }}
+                  />
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-slate-400">
+                    <Calendar size={20} />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-600 flex items-center gap-2">
+                <Shield size={16} /> E-mail
+              </label>
+              <input
+                type="email"
+                placeholder="Ex: joao@email.com"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-slate-800"
+              />
             </div>
 
             <div className="space-y-2">
@@ -312,10 +421,13 @@ function UsuarioForm() {
                 >
                   <option value="">Selecione um setor</option>
                     {Array.from(
-                    new Map(setores.map((s) => [s.nome, s])).values()
+                    new Map(setores.map((s) => {
+                      const display = s.subsetor ? `${s.nome} - ${s.subsetor}` : s.nome;
+                      return [display, { ...s, display }];
+                    })).values()
                     ).map((setor) => (
-                    <option key={setor.id} value={setor.nome}>
-                        {setor.nome}
+                    <option key={setor.id} value={setor.display}>
+                        {setor.display}
                     </option>
                     ))}
                 </select>

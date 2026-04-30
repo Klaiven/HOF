@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('./indicadores.controller');
-const auth = require('../../middlewares/authMiddleware');
+const { authMiddleware } = require('../../middlewares/authMiddleware');
 
-router.get('/tempo-laudo', auth, controller.getTempoLaudo);
-router.get('/exames-imagem', auth, controller.getExamesImagem);
+router.get('/tempo-laudo', authMiddleware, controller.getTempoLaudo);
+router.get('/exames-imagem', authMiddleware, controller.getExamesImagem);
+router.get('/painel-laudos', authMiddleware, controller.getPainelLaudos);
 
 module.exports = router;
